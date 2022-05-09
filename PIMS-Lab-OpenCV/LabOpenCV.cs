@@ -52,7 +52,7 @@ namespace PIMS_Lab_OpenCV
 
             /** Point operations
              *  TODO Exercise 2: Binarization or static-value thresholding of the grayscale image. Compute both 'Binary' with a threshold of 128 and 'Otsu' (optimal) thresholding 
-             *      - Tip: ' Cv2.Threshold' can be used to perform the operation. Change function arguments to select between 'Binary' and 'Otsu' thresholding 
+             *      - Tip: 'Cv2.Threshold' can be used to perform the operation. Change function arguments to select between 'Binary' and 'Otsu' thresholdings
              *  Compute the images, display and save them */
 
             //----------------------------------------------------------------------------------//
@@ -82,7 +82,7 @@ namespace PIMS_Lab_OpenCV
              *  TODO Exercise 6: (Manually) add salt and pepper noise to the grayscale image. Each pixel has a probability of
              *  0.05 (5%) to be affected by noise. Each noise pixel has a 50/50 chance to be black/white 
              *      - Tip: img.Cols and img.Rows can be used to iterate through the matrix 
-             *      - Tip: img.At<byte>(x,y) can be used to access pixels for single channel images, for RGB images you need img.At<Vec3b>(x,y)
+             *      - Tip: img.At<byte>(x,y) can be used to access pixels for single channel images, for BGR images you need img.At<Vec3b>(x,y)
              *  Compute the image, display and save it */
 
             //----------------------------------------------------------------------------------//
@@ -115,14 +115,14 @@ namespace PIMS_Lab_OpenCV
 
             /** Gradient
              * TODO Exercise 10: Compute the Laplacian (2nd order derivative) of the grayscale image
-             * - Use either the Sobel methodolody from abobe (change the dx & dy params) or the built in Laplacian function 
+             * - Use either the Sobel methodolody from abobe (change the dx & dy params) or the built-in Laplacian function 
              * - Optional recommendation: Compute the Lapalcian both ways, the results sould be the same
              *  Compute the image, display and save it */
 
             //----------------------------------------------------------------------------------//
 
             /** Image edges
-             *  TODO Exercise 11:Compute the grayscale's image edges using the Canny method
+             *  TODO Exercise 11:Compute the edges for the grayscale image using the Canny method
              *      - Tip: 'Cv2.Canny' performs the needed operation. For further details, refer to https://docs.opencv.org/4.x/dd/d1a/group__imgproc__feature.html#ga04723e007ed888ddf11d9ba04e2232de
              *  Compute the image, display and save it */
 
@@ -131,12 +131,12 @@ namespace PIMS_Lab_OpenCV
             /** This is a simple example of how to extract parts on an image
              *  More specifically, it shows how we can get the contours of an object of interest by:
              *      - (TODO) Grayscaling
-             *      - (TODO) Thresholding (with an appropiate value, you'll use the trusted 'ochiometric' engineering principle) 
+             *      - (TODO) Thresholding (with an appropiate value, we'll use the trusted 'ochiometric' engineering principle) 
              *      - (TODO) Inverting (if necessary) 
              *      - Computing the contours of the image as a Point[][] data structure
-             *      - Drawing the contours, overlay on original image
+             *      - Drawing the contours, overlay them on the original image
              *      - Compute contour area
-             *      - Compute contour center
+             *      - Compute and draw contour center
              * TODO Exercise 12: Complete the TOOO's below to compute the image and save the result */
 
             // Load image
@@ -149,11 +149,11 @@ namespace PIMS_Lab_OpenCV
 
             // TODO: Grayscale image
 
-            // TODO: Threshold the grayscale image in order to separate it from the background as best as possible
+            // TODO: Threshold the grayscale image in order to separate it from the background as best as possible. Set threshold value as you see fit
 
             // TODO: Invert image
 
-            // Compute contours of the image. Note that 'RetrievalModes' specifies which way to extarct contours (tree, list, exterals, etc.)
+            // Compute contours of the image. Note that 'RetrievalModes' specifies in which way to extarct contours (tree, list, external contours, etc.)
             Cv2.FindContours(catThreshImg, out Point[][] contours, out HierarchyIndex[] hierarchy, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
 
             // Draw contours on the color image. '-1' indicates that all contours should be drawn
@@ -167,8 +167,10 @@ namespace PIMS_Lab_OpenCV
             int largestContourIndex = -1;
             for (int i = 0; i < contours.Length; i++)
             {
+                // Compute contour area
                 double currentContourArea = Cv2.ContourArea(contours[i]);
 
+                // Find largest contour's index
                 if (currentContourArea > largestContourArea)
                 {
                     largestContourIndex = i;
@@ -194,13 +196,13 @@ namespace PIMS_Lab_OpenCV
             //----------------------------------------------------------------------------------//
 
             /** TODO Exercise 12: Compute which candidate circle (cyan) is closest to the target circle (red)
-             *      - Find a way to get both the candidates circle's positions and the target circle position
+             *      - Find a way to get both the candidate circles positions and the target circle position
              *      - Most functionality you'll implement follows the example presented above. You'll have to adapt it to your needs
-             *          - Tip: Use 'Cv2.Split()' to split the color image into single channels.
+             *          - Tip: Use 'Cv2.Split()' to split the color image into single channels
              *            Think about how to compute stuff for the candidate and target circles separately
              *      - Draw a white 1px line ('Cv2.Line') from each candidate circle's center to the target's circle center
              *      - Write on the image the distance in pixels
-             *      - Finally, highlight (draw a colored contour) around the closest candidate circle*/
+             *      - Finally, highlight (draw a colored contour) around the closest candidate circle */
 
             // (!) Uncomment below to generate test image
             // Mat circlesImg = labOpenCV.GenerateCirclesImage();
@@ -220,7 +222,7 @@ namespace PIMS_Lab_OpenCV
         private Mat GenerateCirclesImage()
         {
             Size matSize = new Size(1000, 1000);
-            Scalar candidateCirlceColor = new Scalar(255, 255, 0);              // Cyan
+            Scalar candidateCircleColor = new Scalar(255, 255, 0);              // Cyan
             Scalar targetCircleColor = new Scalar(0, 0, 255);                   // Red
             Mat circlesImg = Mat.Zeros(matSize, MatType.CV_8UC3);               // Color (BGR) image
             int gridStep = 100;
@@ -245,7 +247,7 @@ namespace PIMS_Lab_OpenCV
                         // If a circle should be drawn
                         if (rnd.NextDouble() < circleProbability)
                             // Draw candidate circle with a random radius in the specified range
-                            circlesImg.Circle(cols, rows, rnd.Next(circleMinRadius, circleMaxRadius), candidateCirlceColor, -1);
+                            circlesImg.Circle(cols, rows, rnd.Next(circleMinRadius, circleMaxRadius), candidateCircleColor, -1);
 
             // Draw target circle inside 'exclusion zone'
             int borderOffet = 50;
