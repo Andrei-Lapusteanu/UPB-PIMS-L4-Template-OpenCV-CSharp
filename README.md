@@ -4,6 +4,7 @@ OpenCV using a C# wrapper laboratory for image processing
 - Download the template project. Built using .NET framework 4.8
 - Change platform from "Any CPU" to "x64"
 - Follow comments to solve the exercises
+- First build might take more, the required NuGet packages must be downloaded
 
 ## Grading and submission
 - Exercises 1-12 are worth 0.6p each
