@@ -1,4 +1,4 @@
-# UPB-PIMS-L5-Template-OpenCV-CSharp
+# UPB-PIMS-L4-Template-OpenCV-CSharp
 OpenCV using a C# wrapper laboratory for image processing
 
 - Download the template project. Built using .NET framework 4.8
